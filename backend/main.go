@@ -1,0 +1,95 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+type OperationRequest struct {
+	A float64 `json:"a"`
+	B float64 `json:"b"`
+}
+
+type OperationResponse struct {
+	Result float64 `json:"result"`
+}
+
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
+func addHandler(w http.ResponseWriter, r *http.Request) {
+	var req OperationRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ErrorResponse{Error: "invalid request body"})
+		return
+	}
+
+	result := Add(req.A, req.B)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(OperationResponse{Result: result})
+}
+
+func subtractHandler(w http.ResponseWriter, r *http.Request) {
+	var req OperationRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ErrorResponse{Error: "invalid request body"})
+		return
+	}
+
+	result := Subtract(req.A, req.B)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(OperationResponse{Result: result})
+}
+
+func multiplyHandler(w http.ResponseWriter, r *http.Request) {
+	var req OperationRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ErrorResponse{Error: "invalid request body"})
+		return
+	}
+
+	result := Multiply(req.A, req.B)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(OperationResponse{Result: result})
+}
+
+func divideHandler(w http.ResponseWriter, r *http.Request) {
+	var req OperationRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ErrorResponse{Error: "invalid request body"})
+		return
+	}
+
+	result, err := Divide(req.A, req.B)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(OperationResponse{Result: result})
+}
+
+func main() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "Calculator API is running")
+	})
+
+	http.HandleFunc("/add", addHandler)
+	http.HandleFunc("/subtract", subtractHandler)
+	http.HandleFunc("/multiply", multiplyHandler)
+	http.HandleFunc("/divide", divideHandler)
+
+	fmt.Println("Server starting on :8080")
+	http.ListenAndServe(":8080", nil)
+}
