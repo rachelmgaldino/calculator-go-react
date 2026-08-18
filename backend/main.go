@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -20,6 +21,8 @@ type ErrorResponse struct {
 }
 
 func addHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	var req OperationRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -28,12 +31,12 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	result := Add(req.A, req.B)
-
-	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(OperationResponse{Result: result})
 }
 
 func subtractHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	var req OperationRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -42,12 +45,12 @@ func subtractHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	result := Subtract(req.A, req.B)
-
-	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(OperationResponse{Result: result})
 }
 
 func multiplyHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	var req OperationRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -56,12 +59,12 @@ func multiplyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	result := Multiply(req.A, req.B)
-
-	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(OperationResponse{Result: result})
 }
 
 func divideHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	var req OperationRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -76,7 +79,6 @@ func divideHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(OperationResponse{Result: result})
 }
 
@@ -91,5 +93,7 @@ func main() {
 	http.HandleFunc("/divide", divideHandler)
 
 	fmt.Println("Server starting on :8080")
-	http.ListenAndServe(":8080", nil)
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatal(err)
+	}
 }
