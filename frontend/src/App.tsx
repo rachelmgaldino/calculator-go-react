@@ -114,6 +114,12 @@ function App() {
     setIsCalculating(false);
   }
 
+  function handlePercent() {
+    if (current === "Error") return;
+    setCurrent(String(parseFloat(current) / 100));
+    setIsNewEntry(true);
+  }
+
   return (
     <div className="card">
       <div className="head">
@@ -138,20 +144,20 @@ function App() {
         <button onClick={handleClear} className="fn">
           AC
         </button>
-        <button className="fn" disabled>
+        <button className="fn" onClick={handlePercent} disabled={isCalculating}>
           %
         </button>
-        <button className="op" onClick={() => handleOperator("÷")}>
+        <button className="op" onClick={() => handleOperator("÷")} disabled={isCalculating}>
           ÷
         </button>
-        <button className="op" onClick={() => handleOperator("×")}>
+        <button className="op" onClick={() => handleOperator("×")} disabled={isCalculating}>
           ×
         </button>
 
         <button onClick={() => handleDigit("7")}>7</button>
         <button onClick={() => handleDigit("8")}>8</button>
         <button onClick={() => handleDigit("9")}>9</button>
-        <button className="op" onClick={() => handleOperator("−")}>
+        <button className="op" onClick={() => handleOperator("−")} disabled={isCalculating}>
           −
         </button>
 
