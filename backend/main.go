@@ -82,15 +82,30 @@ func divideHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(OperationResponse{Result: result})
 }
 
+func withCORS(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next(w, r)
+	}
+}
+
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Calculator API is running")
 	})
 
-	http.HandleFunc("/add", addHandler)
-	http.HandleFunc("/subtract", subtractHandler)
-	http.HandleFunc("/multiply", multiplyHandler)
-	http.HandleFunc("/divide", divideHandler)
+	http.HandleFunc("/add", withCORS(addHandler))
+	http.HandleFunc("/subtract", withCORS(subtractHandler))
+	http.HandleFunc("/multiply", withCORS(multiplyHandler))
+	http.HandleFunc("/divide", withCORS(divideHandler))
 
 	fmt.Println("Server starting on :8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
