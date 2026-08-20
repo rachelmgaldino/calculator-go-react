@@ -1,7 +1,7 @@
-# Calculator
+# Fullstack Calculator (Go + React)
 
-A full-stack calculator: a Go HTTP API doing the arithmetic, and a React (TypeScript) frontend
-calling it. Built as a take-home assignment.
+A Go HTTP API handles the arithmetic, a React frontend calls it. Built as a take-home assignment,
+and the first project where I actually used Go.
 
 ![Calculator UI](docs/calculator.png)
 
