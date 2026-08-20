@@ -135,7 +135,7 @@ function App() {
               : ""}
         </div>
         <div className="spacer"></div>
-        <div className={`result${current === "Error" ? " error" : ""}`}>
+        <div className={`result${current === "Error" ? " error" : ""}`} data-testid="result">
           {current}
         </div>
       </div>
