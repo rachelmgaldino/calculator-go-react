@@ -10,6 +10,19 @@ calling it. Built as a take-home assignment.
 - **Testing**: Go's built-in `testing` package on the backend; Vitest + React Testing Library on
   the frontend
 
+## Requirements checklist
+
+| Requirement | Status |
+|---|---|
+| Add, subtract, multiply, divide | Done, both backend and frontend |
+| Input validation and error handling | Done (invalid JSON, division by zero, both return a `400` with a clear error message, surfaced on screen in the UI) |
+| Unit tests, both layers, with coverage report | Done, 10 backend tests, 12 frontend tests, coverage reported for each (see [Testing](#testing)) |
+| README: setup, API examples, design rationale | This file |
+| Extra operation: percentage | Done (frontend-only, see [Percent](#percent)) |
+| Extra operations: exponent, square root | Not implemented, scoped out to prioritize depth on the required four plus real test coverage |
+| AI tooling disclosed, prompts shared | Done (see [AI tooling](#ai-tooling)) |
+| Dockerfile (frontend + backend together) | Not included, listed as optional in the assignment |
+
 ## Project structure
 
 ```
