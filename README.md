@@ -3,6 +3,8 @@
 A full-stack calculator: a Go HTTP API doing the arithmetic, and a React (TypeScript) frontend
 calling it. Built as a take-home assignment.
 
+![Calculator UI](docs/calculator.png)
+
 ## Stack
 
 - **Backend**: Go, standard library only (`net/http`), no framework
